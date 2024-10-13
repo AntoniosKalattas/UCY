@@ -3,7 +3,19 @@
 A: .word 11 22 33 44 55 66 77 88 99 110
 SIZE: .word 10
 .text
-    j main
+    main:
+        #lw $s0,A($0)
+        addi $s3,$0,10
+        #Call the rSum:
+        addi $s5,$0,1
+        jal rSum
+
+        li $v0, 1
+        move $a0, $s5
+        syscall
+
+        li $v0,10
+        syscall
     ###Arguments#####
     # A -> $s0
     # n -> $s3
@@ -24,7 +36,7 @@ SIZE: .word 10
         
         add $t7,$s3,$s3 # n + n = 2n
         add $t7,$t7, $t7    # 2n + 2n = 4n.
-        add $t4, $t7, $s0
+        add $t4, $t7, $0
         lw $t3, A($t4)
         add $s5,$s5,$t3 # sum += A[i];
         j end_rSum
@@ -36,13 +48,4 @@ SIZE: .word 10
             lw $ra, 8($sp) # bring the return addres from mem.
             addi $sp,$sp,12
             jr $ra 
-    main:
-        #lw $s0,A($0)
-        addi $s3,$0,10
-        #Call the rSum:
-        addi $s5,$0,1
-        jal rSum
-
-        li $v0, 1
-        move $a0, $s5
-        syscall
+    
